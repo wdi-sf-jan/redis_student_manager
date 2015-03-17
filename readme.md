@@ -14,6 +14,7 @@ For tonight's lab, we'd like you to build an app that uses node on the backend w
 7. Think about what redis data structure you are going to use to store your students 
 8. Begin by including the required dependencies in your `app.js` and add an `index.ejs` to your views folder.
 9. Start working on your routes 
+10. Make sure you have a redis server running!
 
 
 ### Basic Requirements
