@@ -13,73 +13,62 @@ app.use(methodOverride('_method'));
 
 // REGULAR GET
 app.get('/', function(req,res){
-  // client.lrange("students",0, -1, function(err,students){
-    res.render('index');
-  // })
+  res.render('index');
 });
 
 // AJAX GET
 app.get('/students.json', function(req,res){
-  client.lrange("students",0, -1, function(err,students){
+  client.smembers("students", function(err,students){
     res.json(students);
-  })
+  });
 });
 
-// REGULAR POST
 
-// app.post('/add', function(req,res){
-//   client.lpush("students",req.body.name)
-//   res.redirect('/');
-// });
 
 // AJAX POST
 
 app.post('/add.json', function(req,res){
-  client.lpush("students",req.body.name)
-  res.json("ADDED")
+  client.sismember("students", req.body.name, function(err,reply){
+    if(reply > 0){
+      res.json("No duplicates please")
+    }
+    else {
+      client.sadd("students",req.body.name)
+      res.status(201).json("")
+    }
+  })
 });
-
-// REGULAR DELETE_ONE
-
-// app.delete("/student/:name/", function(req,res){
-//   client.lrange("students",0,-1,function(err,students){
-//     students.forEach(function(student){
-//       if (req.params.name === student){
-//         client.lrem("students",1, student)
-//         res.redirect('/');
-//       }
-//     })
-//   });
-// })
 
 // AJAX UPDATE
 
+// check if new name is part of the set, if it is do nothing....
+// 1 = part of the set
+// 2 = not part
+
 app.put("/student/:name.json", function(req,res){
-  client.lrange("students",0,-1,function(err,students){
-    console.log("GOT HERE!!")
-    students.forEach(function(student){
-      if (req.params.name === student){
-        console.log(req.params)
-        console.log(req.body)
-        client.lrem("students",1, student)
-        client.lpush("students",req.body.newName)
-        res.json('UPDATED');
+  if(req.body.newName.length < 1){
+    res.status(406).json("The student must have a name")
+  }
+  else{
+      client.sismember("students", req.body.newName, function (err,reply){
+      if(reply === 1){
+        res.json("That name already exists")
+      }
+      else {
+        client.srem("students", req.params.name)
+        client.sadd("students",req.body.newName)
+        res.status(204).json("");
       }
     })
-  });
+  }
 })
 
 // AJAX DELETE_ONE
 
 app.delete("/student/:name.json", function(req,res){
-  client.lrange("students",0,-1,function(err,students){
-    students.forEach(function(student){
-      if (req.params.name === student){
-        console.log("HIT!")
-        client.lrem("students",1, student)
-        res.json('DELETED');
-      }
-    })
+  client.sismember("students", req.params.name, function(err,reply){
+    client.srem("students", req.params.name)
+    res.json("");
   });
 })
 
@@ -87,16 +76,8 @@ app.delete("/student/:name.json", function(req,res){
 
 app.delete('/students.json', function(req,res){
   client.del("students")
-  res.json('ALL DELETED');
+  res.status(204).json();
 });
-
-
-// REGULAR DELETE
-
-// app.delete('/students', function(req,res){
-//   client.del("students")
-//   res.redirect('/');
-// });
 
 app.get('*', function(req,res){
   res.render('404');

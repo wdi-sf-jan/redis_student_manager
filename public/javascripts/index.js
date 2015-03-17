@@ -1,5 +1,6 @@
 $(document).ready(function(){
   var val, newName;
+  $("#warning").hide()
   //ajax calls
 
   //get all students
@@ -16,19 +17,24 @@ $(document).ready(function(){
 
   //add a student
   function addStudent(name){
+    $("#warning").hide()
     $.ajax({
       method: "POST",
       url: "/add.json",
       data: {name: name},
       success: function(data){
-        console.log(data)
+        $("#warning").text("")
         getStudents();
+        if(typeof data === "string" && data.length > 1){
+          $("#warning").show().append(data)
+        }
       }
     })
   }
 
   //update a student
   function editStudent(name,newName){
+    $("#warning").text("")
     $.ajax({
       method: "PUT",
       url: "/student/" + name + ".json",
@@ -36,9 +42,12 @@ $(document).ready(function(){
       success: function(data){
         console.log(data)
         getStudents();
+        if(typeof data === "string" && data.length > 1){
+          $("#warning").show().append(data)
+        }
       },
       error: function(err){
-        console.log(err)
+        $("#warning").show().append(err.responseText)
       }
     })
   }
@@ -50,7 +59,7 @@ $(document).ready(function(){
       method: "DELETE",
       url: "/student/" + name + ".json",
       success: function(data){
-        console.log(data)
+        $("#warning").hide()
         getStudents();
       },
       error: function(err){
@@ -65,7 +74,7 @@ $(document).ready(function(){
       method: "DELETE",
       url: "/students.json",
       success: function(data){
-        console.log(data)
+        $("#warning").hide()
         getStudents();
       },
       error: function(err){
@@ -79,40 +88,36 @@ $(document).ready(function(){
 
   $("body").on("click", ".edit", function(){
     // insert an form with input and button
-    val = $(this).parent().text().trim()
-    var $form = '<form class="edit-one" action="/student/' + val + '.json?_method=put" method="POST"><input class="new-name" type="text" value="' + val + '"><input class= "btn btn-sm btn-info" type="submit" value="edit"></form>'
+    val = $(this).parent().text().trim();
+    var $form = '<form class="edit-one" action="/student/' + val + '.json?_method=put" method="POST"><input class="new-name" type="text" value="' + val + '"><input class= "btn btn-sm btn-info" type="submit" value="edit"></form>';
     // $("body").append($form)
-    $(this).parent().parent().append($form)
+    $(this).parent().parent().append($form);
     // hide delete button
-    $(this).parent().next().hide()
+    $(this).parent().next().hide();
     // hide the pencil
-    $(this).parent().hide()
+    $(this).parent().hide();
 
     // TODO - FIX DOUBLE EVENT DELEGATION!
     $(".edit-one").on("submit", function(e){
       e.preventDefault();
       newName = $(".new-name").val();
-      console.log(newName)
       editStudent(val,newName);
-      getStudents();
-    })
-  })
-
-
+    });
+  });
 
   $("body").on("submit", ".remove-one", function(e){
     e.preventDefault();
     $(this).hide();
     val = $(this).children()[0].innerText.trim();
     deleteStudent(val);
-  })
+  });
 
   $(".add").on("submit", function(e){
     e.preventDefault();
     val = $("#name").val();
     addStudent(val);
     $("#name").val("");
-  })
+  });
 
   $(".delete-all").on("click", function(e){
     e.preventDefault();

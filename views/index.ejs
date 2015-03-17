@@ -31,12 +31,18 @@
   {{/each}}
 </script>
 
+
+<p id="warning" class="text-danger">
+
+</p>
+
+
 <div id="info">
 
 </div>
 
 
-<form action="javascript:void(0)" class="add" method="POST" >
+<form action="javascript:void(0)" class="add" method="POST" autocomplete="off">
   <p>
     <label for="name">Name: </label>
     <input type="text" name="name" id="name" autofocus required>
@@ -45,7 +51,6 @@
     <input type="submit" value="Add a student" class="btn btn-success">
   </p>
 </form>
-
 
 
 <form action="/students?_method=delete" method="POST">
