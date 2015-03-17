@@ -12,6 +12,8 @@ For tonight's lab, we'd like you to build an app that uses node on the backend w
 6. inside this folder, create another folder called views
 6. `npm install --save` the required packages (express, ejs, body-parser, method-override, redis)
 7. Think about what redis data structure you are going to use to store your students 
+8. Begin by including the required dependencies in your `app.js` and add an `index.ejs` to your views folder.
+9. Start working on your routes 
 
 
 ### Basic Requirements
