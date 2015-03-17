@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body class="container text-center">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<link rel="stylesheet" href="stylesheets/index.css">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<h1>Here are our students</h1>
+
+<script id="template" type="text/x-handlebars-template">
+
+  {{#each students}}
+  <form action="/student/{{this}}/?_method=delete" method="POST"class="remove-one">
+
+    <p>
+      <span> {{this}} <icon style="cursor:pointer;" class="glyphicon edit glyphicon-pencil"></icon> </span>
+    <input type="submit" value="X" class="btn btn-xs btn-danger">
+    </p>
+  </form>
+  {{/each}}
+</script>
+
+<div id="info">
+
+</div>
+
+
+<form action="javascript:void(0)" class="add" method="POST" >
+  <p>
+    <label for="name">Name: </label>
+    <input type="text" name="name" id="name" autofocus required>
+  </p>
+  <p>
+    <input type="submit" value="Add a student" class="btn btn-success">
+  </p>
+</form>
+
+
+
+<form action="/students?_method=delete" method="POST">
+  <input type="submit" value="Delete All" class="delete-all btn btn-danger">
+</form>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js"> </script>
+<script src="javascripts/index.js"></script>
+
+
+</body>
+</html>
