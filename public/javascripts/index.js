@@ -1,6 +1,6 @@
 $(document).ready(function(){
   var val, newName;
-  $("#warning").hide()
+  $("#warning").hide();
   //ajax calls
 
   //get all students
@@ -8,48 +8,47 @@ $(document).ready(function(){
     $.getJSON("/students.json", function(students){
       var obj = {
         students: students
-      }
+      };
       var source = $("#template").html();
       var template = Handlebars.compile(source)(obj);
-      $("#info").html(template)
-    })
+      $("#info").html(template);
+    });
   }
 
   //add a student
   function addStudent(name){
-    $("#warning").hide()
+    $("#warning").hide();
     $.ajax({
       method: "POST",
       url: "/add.json",
       data: {name: name},
       success: function(data){
-        $("#warning").text("")
+        $("#warning").text("");
         getStudents();
         if(typeof data === "string" && data.length > 1){
-          $("#warning").show().append(data)
+          $("#warning").show().append(data);
         }
       }
-    })
+    });
   }
 
   //update a student
   function editStudent(name,newName){
-    $("#warning").text("")
+    $("#warning").text("");
     $.ajax({
       method: "PUT",
       url: "/student/" + name + ".json",
       data: {newName: newName},
       success: function(data){
-        console.log(data)
         getStudents();
         if(typeof data === "string" && data.length > 1){
-          $("#warning").show().append(data)
+          $("#warning").show().append(data);
         }
       },
       error: function(err){
-        $("#warning").show().append(err.responseText)
+        $("#warning").show().append(err.responseText);
       }
-    })
+    });
   }
 
 
@@ -97,7 +96,6 @@ $(document).ready(function(){
     // hide the pencil
     $(this).parent().hide();
 
-    // TODO - FIX DOUBLE EVENT DELEGATION!
     $(".edit-one").on("submit", function(e){
       e.preventDefault();
       newName = $(".new-name").val();
