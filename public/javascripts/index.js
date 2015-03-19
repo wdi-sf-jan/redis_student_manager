@@ -59,13 +59,13 @@ $(document).ready(function(){
       method: "DELETE",
       url: "/student/" + name + ".json",
       success: function(data){
-        $("#warning").hide()
+        $("#warning").hide();
         getStudents();
       },
       error: function(err){
-        console.log(err)
+        console.log(err);
       }
-    })
+    });
   }
 
   //delete all students
@@ -74,17 +74,17 @@ $(document).ready(function(){
       method: "DELETE",
       url: "/students.json",
       success: function(data){
-        $("#warning").hide()
+        $("#warning").hide();
         getStudents();
       },
       error: function(err){
-        console.log(err)
+        console.log(err);
       }
-    })
+    });
   }
 
   // start by grabbing all existing students
-  getStudents()
+  getStudents();
 
   $("body").on("click", ".edit", function(){
     // insert an form with input and button
@@ -125,5 +125,5 @@ $(document).ready(function(){
     if (conf){
       deleteStudents();
     }
-  })
+  });
 });

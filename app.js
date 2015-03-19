@@ -29,14 +29,15 @@ app.get('/students.json', function(req,res){
 
 app.post('/add.json', function(req,res){
   client.sismember("students", req.body.name, function(err,reply){
+    console.log(reply);
     if(reply > 0){
-      res.json("No duplicates please")
+      res.json("No duplicates please");
     }
     else {
-      client.sadd("students",req.body.name)
-      res.status(201).json("")
+      client.sadd("students",req.body.name);
+      res.status(201).json("");
     }
-  })
+  });
 });
 
 // AJAX UPDATE
@@ -47,35 +48,35 @@ app.post('/add.json', function(req,res){
 
 app.put("/student/:name.json", function(req,res){
   if(req.body.newName.length < 1){
-    res.status(406).json("The student must have a name")
+    res.status(406).json("The student must have a name");
   }
   else{
       client.sismember("students", req.body.newName, function (err,reply){
       if(reply === 1){
-        res.json("That name already exists")
+        res.json("That name already exists");
       }
       else {
-        client.srem("students", req.params.name)
-        client.sadd("students",req.body.newName)
+        client.srem("students", req.params.name);
+        client.sadd("students",req.body.newName);
         res.status(204).json("");
       }
-    })
+    });
   }
-})
+});
 
 // AJAX DELETE_ONE
 
 app.delete("/student/:name.json", function(req,res){
   client.sismember("students", req.params.name, function(err,reply){
-    client.srem("students", req.params.name)
+    client.srem("students", req.params.name);
     res.json("");
   });
-})
+});
 
 // AJAX DELETE ALL
 
 app.delete('/students.json', function(req,res){
-  client.del("students")
+  client.del("students");
   res.status(204).json();
 });
 
